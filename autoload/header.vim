@@ -1,3 +1,30 @@
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02-04-2018 13:27:05
+" Last Modified Date: 02-04-2018 13:27:05
+" Last Modified By  : Matheus Rezende <@matheusrezende>
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02-04-2018 13:26:42
+" Last Modified Date: 02-04-2018 13:26:42
+" Last Modified By  : Matheus Rezende <@matheusrezende>
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02-04-2018 13:26:17
+" Last Modified Date: 02-04-2018 13:26:17
+" Last Modified By  : Matheus Rezende <@matheusrezende>
+" File              : autoload/header.vim
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02.04.2018
+" Last Modified Date: 02.04.2018
+" Last Modified By  : Matheus Rezende <@matheusrezende>
+" File              : autoload/header.vim
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02.04.2018
+" Last Modified Date: 02.04.2018
+" Last Modified By  : Matheus Rezende <@matheusrezende>
+" File              : autoload/header.vim
+" Author            : Matheus Rezende <@matheusrezende>
+" Date              : 02.04.2018
+" Last Modified Date: 02.04.2018
+" Last Modified By  : Matheus Rezende <@matheusrezende>
 " PROPERTIES AND FUNCTIONS FOR GENERAL PURPOSES
 " ---------------------------------------------
 " Set default global values
@@ -20,7 +47,7 @@ if !exists('g:header_field_modified_by')
     let g:header_field_modified_by = 1
 endif
 if !exists('g:header_field_timestamp_format')
-    let g:header_field_timestamp_format = '%d.%m.%Y'
+    let g:header_field_timestamp_format = '%d-%m-%Y %h:%m:%s'
 endif
 if !exists('g:header_cfg_comment_char')
     let g:header_cfg_comment_char = '#'
@@ -76,7 +103,7 @@ fun s:set_props()
 
         let b:block_comment = 1
         let b:comment_char = ' *'
-        let b:comment_begin = '/**'
+        let b:comment_begin = '/*'
         let b:comment_end = ' */'
     " ----------------------------------
     elseif b:filetype == 'haskell'
@@ -178,16 +205,20 @@ fun s:set_props()
         let b:field_author = '@author'
     endif
     if b:filetype == 'css'
-        let b:min_comment_begin = '/*!'
+      let b:min_comment_begin = '/*!'
     endif
     if
+        \ b:filetype == 'js' ||
         \ b:filetype == 'javascript' ||
         \ b:filetype == 'javascript.jsx' ||
         \ b:filetype == 'typescript'
 
-        let b:min_comment_begin = '/*!'
+        let b:min_comment_begin = '/*'
         let b:field_file = '@file'
-        let b:field_author = '@author'
+        let b:field_author = '@Author'
+        let b:field_modified_date = '@Last Modified time'
+        let b:field_modified_by = '@Last Modified by'
+        let b:field_date = '@Date'
     endif
 
     " For license texts, if there is a empty line, avoid trailing white space
@@ -299,7 +330,7 @@ endfun
 " Used to switch between aligned and non-aligned headers for headers
 " who have fixed values (i.e File...)
 fun s:update_header_field(field)
-    let l:field_without_spaces = substitute(a:field, '\s*:$', '\\s*.*:', '')
+    let l:field_without_spaces = substitute(a:field, '\s*:$', '\\s*[^:]*:', '')
     execute '0,'. g:header_max_size .'s/' . l:field_without_spaces . '/' . a:field . '/'
 endfun
 
